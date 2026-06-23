@@ -103,9 +103,15 @@ class Beam:
         self.rct.left = bird.rct.right  # ビームの左座標 = こうかとんの右座標
         self.vx, self.vy = +5, 0
         self.vx, self.vy = bird.dire
+        # ビームの進行方向(vx, vy)から、画像を回転させるための角度(度数法)を計算する
+        # ※Pygameは画面下方向がy軸プラスのため、-self.vyにして標準的な数学の座標系に合わせる
         angle = math.degrees(math.atan2(-self.vy, self.vx))
+        # beam.pngを読み込み、計算した角度(angle)で画像を回転させる（拡大率は1.0のまま）
         self.img = pg.transform.rotozoom(pg.image.load(f"fig/beam.png"), angle, 1.0)
+        # 回転処理をしたあとの画像から、新しくRect（矩形情報）を取得する
         self.rct = self.img.get_rect()
+        # ビームの出現位置をこうかとんの中心からずらす（くちばし付近から出るようにする）
+        # ※現在の速度(vx, vy)を基本移動量の5で割ることで、向きの比率（1や-1など）を掛けている
         self.rct.centerx = bird.rct.centerx + bird.rct.width * self.vx // 5
         self.rct.centery = bird.rct.centery + bird.rct.height * self.vy // 5
 
